@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Todo;
+use App\Events\TodoEvent;
 
 class TodoController extends Controller
 {
@@ -66,6 +67,7 @@ class TodoController extends Controller
     {
         $todo = Todo::findOrFail($id);
         $todo->update(['completed' => !$todo->completed]);
+        event(new TodoEvent($todo));
         return response()->json(['message' => 'Todo updated successfully', 'todo' => $todo], 200);
     }
 }
